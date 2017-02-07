@@ -1,0 +1,10 @@
+---
+- name: wait for ssh connection to the hosts in the ssh_check group to become available
+  raw: ssh {{hostvars[item].ansible_user}}@{{item}}; exit
+  register: _result
+  delay: 10
+  retries: 30
+  until: _result.rc == 0
+  changed_when: False
+  failed_when: False
+  with_items: "{{groups.ssh_check is defined | ternary(groups.ssh_check, [])}}"
