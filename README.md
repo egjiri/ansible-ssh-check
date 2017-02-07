@@ -1,38 +1,25 @@
-Role Name
-=========
+# Ansible Role: `egjiri.ssh-check`
 
-A brief description of the role goes here.
+A common problem is launching new VM instances and trying to provision them through Ansible before ssh connection is available. This role allows you to wait for ssh connectivity to become available before proceeding with the rest of your tasks
 
-Requirements
-------------
+## Instructions
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+### Installation
+```
+ansible-galaxy install egjiri.ssh-check
+```
 
-Role Variables
---------------
+### Usage
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Set the hosts that you want to wait for ssh connectivity as part of the `ssh_check` inventor group. This role will skip all other hosts.
 
-Dependencies
-------------
+## Example
+```
+# Make sure that your hosts have been set as part of the `ssh_check` group before this point.
+# The following snippet is how you would then use the role in your Playbook
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+- hosts: localhost
+  gather_facts: False
+  roles:
+  - egjiri.ssh-check
+```
