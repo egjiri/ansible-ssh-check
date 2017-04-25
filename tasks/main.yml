@@ -1,6 +1,9 @@
 ---
 - name: wait for ssh connection to the hosts in the ssh_check group to become available
-  raw: ssh {{hostvars[item].ansible_user}}@{{item}}; exit
+  vars:
+    ssh_user: "{{hostvars[item].ansible_user}}"
+    ssh_key: "{{hostvars[item].ansible_ssh_private_key_file | default()}}"
+  raw: ssh {{ssh_user}}@{{item}} {{ssh_key | ternary('-i', '')}} {{ssh_key}}; exit
   register: _result
   delay: 10
   retries: 30
@@ -8,4 +11,4 @@
   changed_when: False
   failed_when: False
   when: ssh_check_active
-  with_items: "{{groups.ssh_check is defined | ternary(groups.ssh_check, [])}}"
+  with_items: "{{groups.ssh_check | default([])}}"
